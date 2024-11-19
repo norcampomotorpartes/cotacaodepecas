@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotação de Peças - Motor Partes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #ffffff; /* Branco */
+            color: black;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+        header img {
+            max-height: 120px;
+            margin-bottom: 10px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6c757d; /* Cinza Médio */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #5a6268;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f1f1f1;
+            color: #555;
+            font-size: 14px;
+        }
+        .message-info {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        /* Estilo do botão suspenso do WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: #fff;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 1000;
+        }
+        .whatsapp-float a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .whatsapp-float:hover {
+            background-color: #20c357;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="https://images.tcdn.com.br/img/img_prod/1356413/1727724703_logo.jpeg" alt="Motor Partes Logo">
+    <h1>Cotação de Peças - Motor Partes</h1>
+</header>
+
+<div class="container">
+    <form id="quizForm">
+        <div class="message-info">
+            <strong>Atenção:</strong> Para cotações e compras para clientes CNPJ fora do estado do Paraná, haverá a cobrança do ICMS-ST de acordo com a <strong>Lei Complementar nº 87/1996</strong> (Lei Kandir) que regula os impostos interestaduais.
+        </div>
+
+        <!-- Pergunta 1 -->
+        <div class="question">
+            <label for="motorType">Escolha o tipo do motor:</label>
+            <select id="motorType" name="motorType" required>
+                <option value="">Selecione</option>
+                <option value="MWM">MWM</option>
+                <option value="Cummins">Cummins</option>
+                <option value="Volvo">Volvo</option>
+                <option value="Iveco">Iveco</option>
+                <option value="Mercedes">Mercedes</option>
+                <option value="FPT">FPT</option>
+            </select>
+        </div>
+
+        <!-- Pergunta 2 -->
+        <div class="question" id="modelQuestion" style="display: none;">
+            <label for="motorModel">Escolha o modelo do motor:</label>
+            <select id="motorModel" name="motorModel" required>
+                <option value="">Selecione</option>
+            </select>
+        </div>
+
+        <!-- Pergunta 3 -->
+        <div class="question" id="partsQuestion" style="display: none;">
+            <label>Selecione as peças desejadas:</label>
+            <div class="checkbox-group" id="partsList"></div>
+        </div>
+
+        <!-- Informações de Frete -->
+        <div class="question" id="freightDetails" style="display: none;">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" required>
+
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" placeholder="Digite seu CEP" required>
+
+            <label for="message">Mensagem adicional:</label>
+            <textarea id="message" name="message" rows="4" placeholder="Digite uma mensagem adicional (opcional)"></textarea>
+        </div>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<footer>
+    <p>Motor Partes Comércio de Peças</p>
+    <p>CNPJ: 41.586.804/0001-00</p>
+    <p>Telefone/WhatsApp: +55 43 3313-7030</p>
+</footer>
+
+<!-- Botão suspenso do WhatsApp -->
+<div class="whatsapp-float">
+    <a href="https://api.whatsapp.com/send?phone=554333137030" target="_blank" title="Fale conosco pelo WhatsApp">
+        &#x1F4AC;
+    </a>
+</div>
+
+<script>
+    const motorModels = {
+        MWM: ["3152", "4248", "4236", "p4000", "225", "226", "229", "x10", "x12", "maxxForce"],
+        Cummins: ["Serie B 4 ou 6 cilindros", "Serie C", "ISB", "ISC", "ISL", "ISF 2.8", "ISF 3.8"],
+        Mercedes: ["352", "366", "904", "924", "906", "926"],
+        Volvo: [],
+        Iveco: [],
+        FPT: []
+    };
+
+    const partsList = [
+        "ANEL PISTA", "ANEIS DO PISTAO", "BALANCIM", "BALANCIM COMPLETO", "BIELA DO MOTOR",
+        "BLOCO DO MOTOR", "BOMBA DAGUA", "BOMBA DE OLEO", "BOMBA INJETORA", "BRONZINA DE BIELA",
+        "BRONZINA DE MANCAL", "BUCHA DE BIELA", "BUCHA DO COMANDO", "CABECOTE COMPLETO", 
+        "CABECOTE PARCIAL", "CARCACA DA DISTRIBUIÇÃO", "COMANDO DE VALVULAS", 
+        "CREMALHEIRA", "JOGO DE JUNTA INFERIOR", "JOGO DE JUNTA SUPERIOR", "JUNTA DA TAMPA DE VALVULAS",
+        "JUNTA DO CABEÇOTE", "JUNTA DO CARTER", "JUNTA DO COLETOR DE ADMISSAO", 
+        "JUNTA DO COLETOR DE ESCAPE", "KIT DE MOTOR", "MOLA DE VALVULAS", "PARAFUSO DE BIELA", 
+        "PARAFUSO DO CABEÇOTE", "PISTAO COM ANEIS", "RESPIRO DO MOTOR", "SENSOR DE ROTAÇÃO", 
+        "SENSOR DE VELOCIDADE", "SENSOR PRESSÃO DO OLEO", "TAMPA DA DISTRIBUIÇÃO", 
+        "TAMPA DE VALVULAS", "TENSIONADOR DA CORREIA", "TURBINA DO MOTOR", 
+        "VALVULA ANTI-CHAMAS", "VALVULA DE ADMISSAO", "VALVULA DE ALIVIO", 
+        "VALVULA DE ESCAPE", "VALVULA MPROP", "VIRABREQUIM", "VOLANTE DO MOTOR"
+    ].sort();
+
+    const motorTypeSelect = document.getElementById('motorType');
+    const motorModelSelect = document.getElementById('motorModel');
+    const modelQuestion = document.getElementById('modelQuestion');
+    const partsQuestion = document.getElementById('partsQuestion');
+    const freightDetails = document.getElementById('freightDetails');
+    const partsListDiv = document.getElementById('partsList');
+    const quizForm = document.getElementById('quizForm');
+    const resultDiv = document.getElementById('result');
+
+    motorTypeSelect.addEventListener('change', () => {
+        const selectedType = motorTypeSelect.value;
+        motorModelSelect.innerHTML = '<option value="">Selecione</option>';
+
+        if (motorModels[selectedType]) {
+            motorModels[selectedType].forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                motorModelSelect.appendChild(option);
+            });
+            modelQuestion.style.display = 'block';
+        } else {
+            modelQuestion.style.display = 'none';
+            partsQuestion.style.display = 'none';
+            freightDetails.style.display = 'none';
+        }
+    });
+
+    motorModelSelect.addEventListener('change', () => {
+        partsListDiv.innerHTML = '';
+        partsList.forEach(part => {
+            const checkboxWrapper = document.createElement('div');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = part;
+            checkbox.name = 'parts';
+            checkbox.value = part;
+
+            const label = document.createElement('label');
+            label.htmlFor = part;
+            label.textContent = part;
+
+            checkboxWrapper.appendChild(checkbox);
+            checkboxWrapper.appendChild(label);
+            partsListDiv.appendChild(checkboxWrapper);
+        });
+        partsQuestion.style.display = 'block';
+        freightDetails.style.display = 'block';
+    });
+
+    quizForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const motorType = motorTypeSelect.value;
+        const motorModel = motorModelSelect.value;
+        const selectedParts = Array.from(document.querySelectorAll('input[name="parts"]:checked')).map(el => el.value);
+        const name = document.getElementById('name').value;
+        const cpf = document.getElementById('cpf').value;
+        const cep = document.getElementById('cep').value;
+        const message = document.getElementById('message').value;
+
+        resultDiv.innerHTML = `
+            <p><strong>Motor Selecionado:</strong> ${motorType} - ${motorModel}</p>
+            <p><strong>Peças Selecionadas:</strong> ${selectedParts.join(', ')}</p>
+            <p><strong>Nome:</strong> ${name}</p>
+            <p><strong>CPF:</strong> ${cpf}</p>
+            <p><strong>CEP:</strong> ${cep}</p>
+            <p><strong>Mensagem:</strong> ${message}</p>
+        `;
+    });
+</script>
+
+</body>
+</html>
